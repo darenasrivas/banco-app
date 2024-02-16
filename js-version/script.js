@@ -108,3 +108,65 @@ const inputTransferAmount = document.querySelector('.form__input--amount')
 const inputLoanAmount = document.querySelector('.form__input--loan-amount')
 const inputCloseUsername = document.querySelector('.form__input--user')
 const inputClosePin = document.querySelector('.form__input--pin')
+
+// Boton Login. USER / PIN
+// Evento click.
+
+btnLogin.addEventListener('click', function (e) {
+  // Le decimos que la actuación normal al darle al boton, no sea la normal. No llame al servidor.
+  // Evita el comportamiento por defecto, que es mandar al servidor.
+  // No llamamos al servidor
+  e.preventDefault()
+  // Buscamos cuenta de usuario y ver si existe
+  const currentAccount = accounts.find(
+    (account) => account.userName === inputLoginUsername.value
+  )
+  // Con number lo pasamos a número para comparar con el pin que le ponemos
+  // ?, significa, si existe/si hemos obtenido algo. Evitamos si el campo pin no existe, ya que daría error y no pasaría
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    console.log('Login Correcto')
+    // Si existe, vemos la pantalla de la App y el mensaje de bienvenida
+    containerApp.style.opacity = 100
+    labelWelcome.textContent = `Bienvenido, ${
+      currentAccount.owner.split(' ')[0]
+    }`
+    // Updateamos la página con los datos de la cuenta
+    updateUI(currentAccount)
+  } else {
+    console.log('Login Incorrecto')
+  }
+
+  // Limpiamos los campos
+  inputLoginUsername.value = inputLoginPin.value = ''
+  // Quitamos el foco
+  inputLoginPin.blur()
+})
+
+// Añadimos los movimientos de cada USER
+
+function updateUI(account) {
+  displayMovements(account.movements)
+}
+
+function displayMovements(movements) {
+  // Limpiamos campos
+  containerMovements.innerHTML = ''
+  // Insertamos datos en campos
+  movements.forEach(function (mov, i) {
+    const type = mov > 0 ? 'deposit' : 'withdrawal'
+    const html = `
+      <div class="movements__row">
+        <div class="movements__type movements__type--${type}">${
+      i + 1
+    } ${type}</div>
+        <div class="movements__value">${mov}€</div>
+      </div>
+    `
+    containerMovements.insertAdjacentHTML('afterbegin', html)
+  })
+}
+
+// SUBIR APP EN REACT
+
+// Se compila con: npm run build
+// Subir la carpeta build a certweb// gh-pages ojo, la carpeta no está en el raiz
