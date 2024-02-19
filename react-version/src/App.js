@@ -1,3 +1,6 @@
+import { useState } from 'react'
+// Importamos los datos de las cuentas
+import accounts from './cuentas'
 import './App.css'
 import Welcome from './Welcome/Welcome'
 import Login from './Login/Login'
@@ -6,6 +9,22 @@ import Movements from './Movements/Movements'
 import Summary from './Summary/Summary'
 
 function App() {
+  // Mostramos la cuenta 0 - account1
+  const [account, setAccount] = useState(accounts[0])
+  // Sacamos los movimientos por desestructuración
+  const { movements } = account
+
+  // TAREAS
+  // 1. Hacer el componente Welcome.
+  // Recibe propiedad que es nombre de usuario y muestra: Bienvenido {nombre de usuario}
+  // Si está vacio, muestra el Log In to get started
+
+  // 2. Hacer componente Login -> usar useRef como antes
+
+  // 3. Hacer los movimientos
+  // Recibe una propiedad que es el array de movimientos
+  // muestra una lista de movimientos que son un componente llamado Movement
+
   return (
     <>
       <nav>
@@ -14,9 +33,9 @@ function App() {
       </nav>
 
       <main className="app">
-        <Balance />
+        <Balance movements={movements} />
         <Movements />
-        <Summary />
+        <Summary movements={movements} />
 
         <div className="operation operation--transfer">
           <h2>Transfer money</h2>
