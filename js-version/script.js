@@ -142,10 +142,13 @@ btnLogin.addEventListener('click', function (e) {
   inputLoginPin.blur()
 })
 
-// Añadimos los movimientos de cada USER
+// Añadimos los movimientos de cada USER.
+// Le pasamos solo "movements", en lugar de "account"
 
-function updateUI(account) {
-  displayMovements(account.movements)
+function updateUI({ movements }) {
+  displayMovements(movements)
+  displayBalance(movements)
+  displaySummary(movements)
 }
 
 function displayMovements(movements) {
@@ -165,6 +168,31 @@ function displayMovements(movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html)
   })
 }
+
+// Mostrar Balance total
+
+const displayBalance = function (movements) {
+  // Acumulador comienza en 0, y va sumando cada movimiento.
+  // Return implicito.
+  const balance = movements.reduce((acc, mov) => acc + mov, 0)
+  labelBalance.textContent = `${balance.toFixed(2)}$`
+}
+
+// Mostramos movimientos IN / OUT de ingresos y retiros
+
+const displaySummary = function (movements) {
+  const sumIn = movements
+    .filter((mov) => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0)
+  labelSumIn.textContent = `${sumIn.toFixed(2)}$`
+
+  const sumOut = movements
+    .filter((mov) => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0)
+  labelSumOut.textContent = `${Math.abs(sumOut).toFixed(2)}$`
+}
+
+// Mostramos los
 
 // SUBIR APP EN REACT
 
