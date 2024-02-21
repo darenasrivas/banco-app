@@ -10,28 +10,29 @@ import Summary from './Summary/Summary'
 
 function App() {
   // Mostramos la cuenta 0 - account1
-  const [account, setAccount] = useState(accounts[2])
+  const [account, setAccount] = useState({})
   // Sacamos los movimientos por desestructuración
   // Recogemos el owner, y le cambiamos el nombre a user
   // Si los movimientos vienen vacios, daremos un array sin datos
   const { movements = [], owner: user = '' } = account
-
-  // TAREAS
-  // 1. Hacer el componente Welcome.
-  // Recibe propiedad que es nombre de usuario y muestra: Bienvenido {nombre de usuario}
-  // Si está vacio, muestra el Log In to get started
-
-  // 2. Hacer componente Login -> usar useRef como antes
-
-  // 3. Hacer los movimientos
-  // Recibe una propiedad que es el array de movimientos
-  // muestra una lista de movimientos que son un componente llamado Movement
+  // Recogemos user y pin del hijo
+  const handleLogin = (user, pin) => {
+    // Aquí iria la llamada al servido con usuario y pin
+    const currentAccount = accounts.find(
+      (account) => account.username === user && account.pin === pin
+    )
+    // Actualizamos el estado de la app con la cuenta actual
+    if (currentAccount) {
+      setAccount(currentAccount)
+    }
+  }
 
   return (
     <>
       <nav>
         <Welcome user={user} />
-        <Login />
+        {/* Cuando llamo al login, llama a la funcion handleLogin definida arriba. La propiedad onLogin, la mando al componente hijo y recibe las propiedades en la funcion login */}
+        <Login onLogin={handleLogin} />
       </nav>
       {/* Si hay user me sacas todo. &&, si todo es verdadero saca el ultimo dato, si no se sale. Atributo Movements, con contenido movements */}
       {user && (
